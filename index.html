@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Pengumuman Kelulusan</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background: #0a1a2f;
+            font-family: Arial, sans-serif;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: #112b4a;
+            padding: 25px 35px;
+            border-radius: 12px;
+            width: 380px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #6bb8ff;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: none;
+            outline: none;
+            border-radius: 6px;
+            background: #0f2238;
+            color: white;
+            font-size: 15px;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 18px;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background: #1e90ff;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #3ca0ff;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 8px;
+            background: #0d2035;
+            display: none;
+        }
+
+        .success { color: #4effa3; }
+        .fail { color: #ff6666; }
+        .warning { color: #ffcc66; }
+
+        /* Tombol PDF */
+        .pdf-btn {
+            background: #00c853;
+            margin-top: 10px;
+        }
+
+        .pdf-btn:hover {
+            background: #19d46a;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>PENGUMUMAN KELULUSAN <br> SMAN 1 BABAKAN CIKIRAY <br> TAHUN 2026</h2>
+
+    <label>NISN</label>
+    <input type="text" id="noPeserta" placeholder="Masukkan NISN">
+
+    <label>Tanggal Lahir</label>
+    <input type="text" id="tglLahir" placeholder="dd-mm-yyyy">
+
+    <button onclick="cekData()">CEK HASIL</button>
+
+    <div id="resultBox" class="result"></div>
+</div>
+
+<script>
+    // Data siswa + nilai + link PDF
+    const data_siswa = {
+        "01010": { 
+            nama: "Davina Karamoy", 
+            tgl_lahir: "01-01-2008", 
+            status: "LULUS", 
+            nilai: 87,
+            pdf: "https://drive.google.com/file/d/1CLeyc3n3Q8TxpYIP5rDCDXNJaKyjpB_r/view?usp=drive_link" 
+        },
+        "02020": {
+            nama: "Mahalini Raharja", 
+            tgl_lahir: "02-02-2008", 
+            status: "LULUS", 
+            nilai: 95,
+            pdf: "https://drive.google.com/file/d/11d-Tls8q7EN0stvrnu5J3G8sAjZdvf3I/view?usp=drive_link" 
+        },
+        "03030": { 
+            nama: "Asep Saepuloh", 
+            tgl_lahir: "03-03-2008", 
+            status: "LULUS", 
+            nilai: 92,
+            pdf: "https://drive.google.com/file/d/1w1zvoLWyehBRIrlDPmIWMNQAHzDWqSag/view?usp=drive_link"  
+        }
+    };
+
+    function cekData() {
+        let no = document.getElementById("noPeserta").value.trim();
+        let tgl = document.getElementById("tglLahir").value.trim();
+        let resultBox = document.getElementById("resultBox");
+
+        // Cek nomor peserta
+        if (!data_siswa.hasOwnProperty(no)) {
+            resultBox.style.display = "block";
+            resultBox.innerHTML = "<p class='warning'>❌ Nomor peserta tidak ditemukan!</p>";
+            return;
+        }
+
+        let siswa = data_siswa[no];
+
+        // Cek tanggal lahir
+        if (tgl !== siswa.tgl_lahir) {
+            resultBox.style.display = "block";
+            resultBox.innerHTML = "<p class='warning'>⚠️ Tanggal lahir tidak sesuai!</p>";
+            return;
+        }
+
+        // Tampilkan hasil lengkap + tombol PDF
+        resultBox.style.display = "block";
+        resultBox.innerHTML = `
+            <p class="success">✅ Data Ditemukan!</p>
+            <p>Nama : <b>${siswa.nama}</b></p>
+            <p>NISN : <b>${no}</b></p>
+            <p>Nilai Rata-rata : <b>${siswa.nilai}</b></p>
+            <p>Status Kelulusan : <b>${siswa.status}</b></p>
+
+            <button class="pdf-btn" onclick="window.open('${siswa.pdf}', '_blank')">
+                📄 Download Surat Kelulusan (PDF)
+            </button>
+        `;
+    }
+</script>
+
+</body>
+</html>
